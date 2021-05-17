@@ -35,4 +35,12 @@ public class Result  {
         fields.put(key,value);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "fields=" + fields +
+                ", skip=" + skip +
+                '}';
+    }
 }

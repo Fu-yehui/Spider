@@ -130,12 +130,6 @@
       <version>4.1.7.RELEASE</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.xiepuhuan</groupId>
-      <artifactId>reptile</artifactId>
-      <version>0.3</version>
-    </dependency>
-
 
 
     <dependency>
@@ -161,6 +155,12 @@
       <artifactId>httpasyncclient</artifactId>
       <version>4.1.2</version>
     </dependency>
+      <dependency>
+          <groupId>com.roger.spider</groupId>
+          <artifactId>spider-common</artifactId>
+          <version>1.0-SNAPSHOT</version>
+          <scope>compile</scope>
+      </dependency>
 
   </dependencies>
 

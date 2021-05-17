@@ -4,6 +4,7 @@ import com.roger.spider.spider_common.downloader.provider.*;
 import com.roger.spider.spider_common.model.Proxy;
 import com.roger.spider.spider_common.model.Request;
 import com.roger.spider.spider_common.model.Response;
+import com.roger.spider.spider_common.utils.ObjectUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,15 +16,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.Map;
 
 /**
  * @author roger
  */
-public class HttpClientDownloader implements Downloader {
+public class HttpClientDownloader implements CloseableDownloader {
 
-    private static Logger logger = LoggerFactory.getLogger(HttpClientDownloader.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(HttpClientDownloader.class);
     private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
     private CloseableHttpClient httpClient ;
     private DownloaderConfig downloaderConfig;
@@ -79,4 +82,12 @@ public class HttpClientDownloader implements Downloader {
     }
 
 
+    @Override
+    public void close() {
+        try {
+            httpClient.close();
+        } catch (IOException e) {
+            LOGGER.warn("Failed to close [{}]: {}", ObjectUtils.getSimpleName(this),e.getMessage());
+        }
+    }
 }

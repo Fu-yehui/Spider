@@ -8,8 +8,8 @@
   <artifactId>QuestionBankSpider</artifactId>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>spider-proxy</module>
-      <module>spider-questionbank</module>
+      <module>spider-proxy</module>
+      <module>web</module>
       <module>spider-common</module>
   </modules>
   <packaging>pom</packaging>

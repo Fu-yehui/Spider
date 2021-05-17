@@ -1,6 +1,6 @@
 package com.roger.spider_proxy.dao;
 
-import com.roger.spider_proxy.entity.Proxy;
+import com.roger.spider.spider_common.model.Proxy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class RedisDaoTest {
 //            redisDao.decrease(proxy);
 //        }
         for (int i = 0; i < 1; i++) {
-            Proxy proxy=new Proxy("127.0.0.1",8888);
+            Proxy proxy=new Proxy("138.32.133.15",3243);
             redisDao.decrease(proxy);
         }
     }

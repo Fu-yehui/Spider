@@ -68,7 +68,7 @@ public class Spider implements Runnable{
 
     public void stop(){
         if(!state.compareAndSet(RUNNING,STOPPING) && !state.compareAndSet(STARTING,STOPPING)){
-            LOGGER.error("Spider [{}] has stopped",getName());
+            LOGGER.error("Spider [{}] has stopping",getName());
             return;
         }
         LOGGER.info("Spider [{}] is stopping",getName());

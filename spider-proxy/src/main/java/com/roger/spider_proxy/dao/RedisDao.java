@@ -1,11 +1,9 @@
 package com.roger.spider_proxy.dao;
 
-import com.roger.spider_proxy.entity.Proxy;
+import com.roger.spider.spider_common.model.Proxy;
 import com.roger.spider_proxy.enums.ProxyScore;
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -21,6 +19,7 @@ public class RedisDao {
 
     private final String KEY="proxy_sorted_set";
 
+//    private RuntimeSchema<Proxy> schema=RuntimeSchema.createFrom(Proxy.class);
 //    private RuntimeSchema<Proxy> schema=RuntimeSchema.createFrom(Proxy.class);
 
     public RedisDao(String ip,int port){
@@ -130,7 +129,6 @@ public class RedisDao {
             proxies=jedis.zrangeByScore(KEY,ProxyScore.MAX_SCORE.getScore(),ProxyScore.MAX_SCORE.getScore());
             if(proxies.size()<5) {
                 proxies = jedis.zrevrange(KEY, 0, 20);
-
             }
         }catch (Exception e){
             LOGGER.error(e.getMessage(),e);
@@ -147,6 +145,10 @@ public class RedisDao {
         return proxies;
     }
 
-
+    public void close(){
+        if(jedisPool != null){
+            jedisPool.close();
+        }
+    }
 
 }

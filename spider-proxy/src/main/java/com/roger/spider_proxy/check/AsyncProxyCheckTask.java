@@ -1,7 +1,7 @@
 package com.roger.spider_proxy.check;
 
+import com.roger.spider.spider_common.model.Proxy;
 import com.roger.spider_proxy.dao.RedisDao;
-import com.roger.spider_proxy.entity.Proxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.http.HttpHost;
@@ -73,7 +73,7 @@ public class AsyncProxyCheckTask implements Runnable {
 
         requestBuilder.setConfig(RequestConfig
                 .custom()
-                .setProxy(new HttpHost(proxy.getIp(),proxy.getPort()))
+                .setProxy(proxy.buildHttpHost())
                 .setConnectTimeout(50000)
                 .setSocketTimeout(50000)
                 .setConnectionRequestTimeout(1000)

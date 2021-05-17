@@ -52,9 +52,7 @@ public class PipelineChain implements CloseablePipeline {
      */
     @Override
     public void process(Result result) throws Throwable {
-
-
-            if(result != null) {
+            if(result != null && !result.isSkip()) {
                 if (!ArgUtils.isEmpty(pipelines)) {
                     for (Pipeline pipeline : pipelines) {
                         pipeline.process(result);

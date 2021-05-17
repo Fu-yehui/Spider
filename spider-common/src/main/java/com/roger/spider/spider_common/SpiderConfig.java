@@ -4,6 +4,8 @@ import com.roger.spider.spider_common.downloader.Downloader;
 import com.roger.spider.spider_common.downloader.HttpClientDownloader;
 import com.roger.spider.spider_common.handler.PageHandler;
 import com.roger.spider.spider_common.handler.PageHandlerChain;
+import com.roger.spider.spider_common.pipeline.ConsolePipeline;
+import com.roger.spider.spider_common.pipeline.Pipeline;
 import com.roger.spider.spider_common.pipeline.PipelineChain;
 import com.roger.spider.spider_common.scheduler.FIFOQueueScheduler;
 import com.roger.spider.spider_common.scheduler.Scheduler;
@@ -85,7 +87,7 @@ public class SpiderConfig {
         private Scheduler scheduler=new FIFOQueueScheduler();
         private Downloader downloader=new HttpClientDownloader();
         private PageHandlerChain pageHandlerChain=new PageHandlerChain();
-        private PipelineChain pipelineChain=new PipelineChain();
+        private PipelineChain pipelineChain=new PipelineChain(new ConsolePipeline());
 
         public SpiderConfigBuilder setName(String name) {
             this.name = name;
@@ -124,6 +126,14 @@ public class SpiderConfig {
 
         public SpiderConfigBuilder setPipelineChain(PipelineChain pipelineChain) {
             this.pipelineChain = pipelineChain;
+            return this;
+        }
+        public SpiderConfigBuilder addPageHandler(PageHandler pageHandler){
+            pageHandlerChain.addPageHandler(pageHandler);
+            return this;
+        }
+        public SpiderConfigBuilder addPipeline(Pipeline pipeline){
+            pipelineChain.addPipeline(pipeline);
             return this;
         }
 

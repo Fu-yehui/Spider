@@ -1,7 +1,7 @@
 package com.roger.spider_proxy.check;
 
+import com.roger.spider.spider_common.model.Proxy;
 import com.roger.spider_proxy.dao.RedisDao;
-import com.roger.spider_proxy.entity.Proxy;
 
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -49,23 +49,12 @@ public class Checker implements Closeable {
 
     public void check(){
         Set<Proxy> set=redisDao.all();
-//        Set<Proxy> set=new HashSet<>();
-//        set.add(new Proxy("60.191.11.241",3128));
-//        set.add(new Proxy("60.191.11.251",3128));
-//        set.add(new Proxy("113.238.142.208",3128));
-//        set.add(new Proxy("115.150.81.171",8118));
-//        set.add(new Proxy("121.199.76.16",8091));
-//        set.add(new Proxy("49.89.85.6",9999));
-
         for(Proxy proxy: set){
             checkProxyValidityExecutor.execute(new ProxyCheckTask(proxy,redisDao));
         }
     }
 
     public void asyncCheck(){
-//        Set<Proxy> set=new HashSet<>();
-//        set.add(new Proxy("60.191.11.241",3128));
-//        set.add(new Proxy("60.191.11.251",3128));
         Set<Proxy> set=redisDao.all();
         for(Proxy proxy: set){
             checkProxyValidityExecutor.execute(new AsyncProxyCheckTask(proxy,redisDao));

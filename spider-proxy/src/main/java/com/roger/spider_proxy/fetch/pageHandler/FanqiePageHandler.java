@@ -2,25 +2,29 @@ package com.roger.spider_proxy.fetch.pageHandler;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.xiepuhuan.reptile.downloader.model.Proxy;
-import com.xiepuhuan.reptile.handler.ResponseHandler;
-import com.xiepuhuan.reptile.model.Request;
-import com.xiepuhuan.reptile.model.ResponseContext;
-import com.xiepuhuan.reptile.model.Result;
+import com.roger.spider.spider_common.handler.PageHandler;
+import com.roger.spider.spider_common.model.Context;
+import com.roger.spider.spider_common.model.Proxy;
+import com.roger.spider.spider_common.model.Request;
+import com.roger.spider.spider_common.model.Result;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Component;
+
 
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toList;
 
-public class FanqiePageHandler implements ResponseHandler {
+@Component
+public class FanqiePageHandler implements PageHandler {
     private static String MAIN_URL="http://x.fanqieip.com";
     private static String regex="http://x\\.fanqieip\\.com/index\\.php\\?s=/Api/IpManager/adminFetchFreeIpRegionInfoList&uid=15075&ukey=24896d3c212f5b27ea1a6b4f62977b5b&limit=20&format=1&page=\\d";
     private static Pattern pattern = Pattern.compile(regex);
     @Override
-    public List<Request> handle(ResponseContext responseContext, Result result) throws Throwable {
-        if(pattern.matcher(responseContext.getRequest().getUrl()).matches()){
-            String content=responseContext.getResponse().getContent().getHtmlContent().body().text();
+    public List<Request> process(Context context, Result result) throws Throwable {
+        if(pattern.matcher(context.getRequest().getUrl()).matches()){
+            String content=context.getResponse().getDocument().body().text();
             JSONObject jsonObject=JSONObject.parseObject(content);
             JSONArray jsonArray=jsonObject.getJSONArray("data");
             List<Proxy> list =jsonArray.stream()
@@ -30,26 +34,20 @@ public class FanqiePageHandler implements ResponseHandler {
                         return new Proxy(item.getString("ip"),Integer.parseInt(item.getString("port")));
                     })
                     .collect(toList());
-            result.setResult("proxies",list);
+            if (CollectionUtils.isEmpty(list)){
+                result.setSkip(true);
+            }else{
+                result.set("proxies", list);
+            }
         }
         return null;
     }
 
     @Override
-    public boolean isSupport(ResponseContext responseContext) {
-        String currentUrl=responseContext.getRequest().getUrl();
+    public boolean isSupport(Context context) {
+        String currentUrl=context.getRequest().getUrl();
         return currentUrl.startsWith(MAIN_URL);
 
     }
 
-    public static void main(String[] args) {
-        String url="http://x.fanqieip.com/index.php?s=/Api/IpManager/adminFetchFreeIpRegionInfoList&uid=15075&ukey=24896d3c212f5b27ea1a6b4f62977b5b&limit=20&format=1&page=2";
-//        String url1="http://x.fanqieip.com/index.php?s=/Api/IpManager/adminFetchFreeIpRegionInfoList&uid=15075&ukey=24896d3c212f5b27ea1a6b4f62977b5b&limit=20&format=1&page=a";
-        String url1="http://x.fanqieip.com/";
-        String fakeUrl="https://www.kuaidaili.com";
-//        System.out.println(url.startsWith(MAIN_URL));
-//        System.out.println(url.startsWith(fakeUrl));
-        System.out.println(pattern.matcher(url).matches());
-        System.out.println(pattern.matcher(url1).matches());
-    }
 }

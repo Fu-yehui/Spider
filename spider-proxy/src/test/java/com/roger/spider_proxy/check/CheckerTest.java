@@ -18,10 +18,10 @@ public class CheckerTest {
 
     @Test
     public void check() throws IOException {
-        long start=System.currentTimeMillis();
+//        long start=System.currentTimeMillis();
         checker.check();
-        System.out.println(System.currentTimeMillis()-start);
-        checker.close();
+//        System.out.println(System.currentTimeMillis()-start);
+//        checker.close();
 //        while (!checker.checkProxyValidityExecutor.isTerminated()){
 //
 //        }
